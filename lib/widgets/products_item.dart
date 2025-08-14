@@ -1,16 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_delivery_supabase/core/constants/color_constants.dart';
 import 'package:food_delivery_supabase/core/size_config.dart';
 import 'package:food_delivery_supabase/models/product_model.dart';
 import 'package:food_delivery_supabase/screens/food_detail_screen.dart';
+import 'package:food_delivery_supabase/screens/provider/favorie_provider.dart';
 import 'package:food_delivery_supabase/widgets/responsive_text.dart';
 
-class ProductsItem extends StatelessWidget {
+class ProductsItem extends ConsumerWidget {
   const ProductsItem({super.key, required this.foodModel});
   final FoodModel foodModel;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider = ref.watch(favoriteProvider);
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -49,11 +52,15 @@ class ProductsItem extends StatelessWidget {
 
               child: CircleAvatar(
                 radius: 15,
-                backgroundColor: Colors.red[100],
-                child: Image.asset(
-                  'assets/food-delivery/icon/fire.png',
-                  height: 22,
-                ),
+                backgroundColor: provider.isExist(foodModel.name)
+                    ? Colors.red[100]
+                    : Colors.transparent,
+                child: provider.isExist(foodModel.name)
+                    ? Image.asset(
+                        'assets/food-delivery/icon/fire.png',
+                        height: 22,
+                      )
+                    : Icon(Icons.local_fire_department_rounded, color: red),
               ),
             ),
           ),
