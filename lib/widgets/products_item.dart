@@ -48,7 +48,9 @@ class ProductsItem extends ConsumerWidget {
             top: 10,
             right: 10,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                ref.read(favoriteProvider).toggleFavorite(foodModel.name);
+              },
 
               child: CircleAvatar(
                 radius: 15,

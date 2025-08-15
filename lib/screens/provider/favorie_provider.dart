@@ -38,7 +38,7 @@ class FavoriteProvider extends ChangeNotifier {
     if (userId == null) return;
     try {
       await supabase.from('favorite').insert({
-        "userId": userId,
+        "user_id": userId,
         "product_id": productId,
       });
     } catch (e) {
@@ -50,7 +50,7 @@ class FavoriteProvider extends ChangeNotifier {
   Future<void> removeFavorite(String productId) async {
     try {
       await supabase.from('favorite').delete().match({
-        "userId": userId!,
+        "user_id": userId!,
         "product_id": productId,
       });
     } catch (e) {
@@ -62,7 +62,7 @@ class FavoriteProvider extends ChangeNotifier {
     if (userId == null) return;
     try {
       final data = await supabase
-          .from('favorites')
+          .from('favorite')
           .select('product_id')
           .eq('user_id', userId!);
       _favoriteIds = data.map((row) => row['product_id'] as String).toList();

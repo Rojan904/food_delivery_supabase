@@ -1,23 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_delivery_supabase/core/constants/app_constant.dart';
 import 'package:food_delivery_supabase/core/constants/color_constants.dart';
 import 'package:food_delivery_supabase/core/size_config.dart';
 import 'package:food_delivery_supabase/models/product_model.dart';
+import 'package:food_delivery_supabase/screens/provider/favorie_provider.dart';
 import 'package:food_delivery_supabase/widgets/responsive_text.dart';
 
-class FavoriteScreen extends StatefulWidget {
+class FavoriteScreen extends ConsumerStatefulWidget {
   const FavoriteScreen({super.key});
 
   @override
-  State<FavoriteScreen> createState() => _FavoriteScreenState();
+  ConsumerState<FavoriteScreen> createState() => _FavoriteScreenState();
 }
 
-class _FavoriteScreenState extends State<FavoriteScreen> {
+class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
     final userId = supabase.auth.currentUser?.id;
-
+    final provider = ref.watch(favoriteProvider);
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -30,9 +32,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           ? Center(child: ResponsiveText('Please login to view favorites'))
           : StreamBuilder<List<Map<String, dynamic>>>(
               stream: supabase
-                  .from('favorites')
+                  .from('favorite')
                   .stream(primaryKey: ['id'])
-                  .eq('userId', userId)
+                  .eq('user_id', userId)
                   .map((data) => data.cast<Map<String, dynamic>>()),
               builder: (ctx, snapshot) {
                 if (!snapshot.hasData) {
@@ -53,6 +55,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                       return Center(child: ResponsiveText('No facorites yet'));
                     }
                     return ListView.builder(
+                      itemCount: favItems.length,
                       itemBuilder: (ctx, index) {
                         final FoodModel items = favItems[index];
                         return Stack(
@@ -116,7 +119,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               ),
                             ),
                             Positioned(
+                              top: 50,
+                              right: 35,
                               child: GestureDetector(
+                                onTap: () {
+                                  provider.toggleFavorite(items.name);
+                                },
                                 child: Icon(Icons.delete, color: red, size: 25),
                               ),
                             ),
@@ -145,10 +153,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           .select()
           .inFilter('name', productNames);
       if (response.isEmpty) return [];
+      return response.map((data) => FoodModel.fromJson(data)).toList();
     } catch (e) {
       print('Error fetching $e');
       return [];
     }
-    return [];
   }
 }

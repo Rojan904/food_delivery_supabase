@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_delivery_supabase/screens/auth/auth_check_screen..dart';
 import 'package:food_delivery_supabase/supabase_constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -8,7 +9,7 @@ void main() async {
   // await dotenv.load();
 
   await Supabase.initialize(anonKey: supabseAnonKey, url: supabaseUrl);
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

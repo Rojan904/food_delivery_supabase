@@ -38,7 +38,7 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
-        title: ResponsiveText('All Products'),
+        title: ResponsiveText('All Products', fontSize: 16),
         backgroundColor: Colors.blue[50],
         forceMaterialTransparency: true,
         centerTitle: true,
@@ -49,7 +49,7 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
               itemCount: products.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 0.59,
+                childAspectRatio: 0.8,
                 crossAxisSpacing: 8,
               ),
               itemBuilder: (ctx, index) {
