@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:food_delivery_supabase/screens/provider/cart_provider.dart';
 import 'package:food_delivery_supabase/screens/provider/favorie_provider.dart';
 import 'package:food_delivery_supabase/service/auth_service.dart';
 
@@ -24,6 +25,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               onPressed: () {
                 authService.logout(context);
                 ref.invalidate(favoriteProvider);
+                ref.invalidate(cartProvider);
               },
               child: Icon(Icons.exit_to_app),
             ),

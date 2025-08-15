@@ -1,20 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_delivery_supabase/core/constants/color_constants.dart';
 import 'package:food_delivery_supabase/core/size_config.dart';
 import 'package:food_delivery_supabase/models/product_model.dart';
+import 'package:food_delivery_supabase/screens/provider/cart_provider.dart';
+import 'package:food_delivery_supabase/widgets/custom_snackbar.dart';
 import 'package:food_delivery_supabase/widgets/responsive_text.dart';
 import 'package:readmore/readmore.dart';
 
-class FoodDetailScreen extends StatefulWidget {
+class FoodDetailScreen extends ConsumerStatefulWidget {
   final FoodModel foodModel;
   const FoodDetailScreen({super.key, required this.foodModel});
 
   @override
-  State<FoodDetailScreen> createState() => _FoodDetailScreenState();
+  ConsumerState<FoodDetailScreen> createState() => _FoodDetailScreenState();
 }
 
-class _FoodDetailScreenState extends State<FoodDetailScreen> {
+class _FoodDetailScreenState extends ConsumerState<FoodDetailScreen> {
   int quantity = 1;
   @override
   Widget build(BuildContext context) {
@@ -189,7 +192,21 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
           elevation: 0,
           onPressed: () {},
           label: MaterialButton(
-            onPressed: () {},
+            onPressed: () async {
+              await ref
+                  .read(cartProvider)
+                  .addCart(
+                    widget.foodModel.name,
+                    widget.foodModel.toMap(),
+                    quantity,
+                  );
+              if (context.mounted) {
+                CustomSnackbar.showSuccessSnackbar(
+                  context,
+                  '${widget.foodModel.name} addd to cart',
+                );
+              }
+            },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(40),
             ),

@@ -74,7 +74,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
                                 child: Row(
                                   children: [
                                     Container(
-                                      width: 110,
+                                      width: 90,
                                       height: 90,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
@@ -82,7 +82,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
                                           image: CachedNetworkImageProvider(
                                             items.imageCard,
                                           ),
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.fill,
                                         ),
                                       ),
                                     ),

@@ -1,22 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_delivery_supabase/core/constants/app_constant.dart';
 import 'package:food_delivery_supabase/core/constants/color_constants.dart';
+import 'package:food_delivery_supabase/screens/provider/cart_provider.dart';
 import 'package:food_delivery_supabase/widgets/responsive_text.dart';
 import 'package:iconsax/iconsax.dart';
 
-class AppMainScreen extends StatefulWidget {
+class AppMainScreen extends ConsumerStatefulWidget {
   const AppMainScreen({super.key});
 
   @override
-  State<AppMainScreen> createState() => _AppMainScreenState();
+  ConsumerState<AppMainScreen> createState() => _AppMainScreenState();
 }
 
-class _AppMainScreenState extends State<AppMainScreen> {
+class _AppMainScreenState extends ConsumerState<AppMainScreen> {
   int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final cp = ref.watch(cartProvider);
     return Scaffold(
       body: pages[currentIndex],
       bottomNavigationBar: Container(
@@ -45,7 +48,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
                         backgroundColor: red,
                         radius: 10,
                         child: ResponsiveText(
-                          '0',
+                          cp.items.length.toString(),
                           fontSize: 12,
                           textColor: Colors.white,
                         ),
